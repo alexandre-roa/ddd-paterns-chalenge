@@ -9,7 +9,7 @@ export default class Order {
     this._id = id;
     this._customerId = customerId;
     this._items = items;
-    this._total = this.total();
+    this._total = this.calculateTotal();
     this.validate();
   }
 
@@ -23,6 +23,10 @@ export default class Order {
 
   get items(): OrderItem[] {
     return this._items;
+  }
+
+  get total(): number {
+    return this._total
   }
 
   validate(): boolean {
@@ -43,15 +47,11 @@ export default class Order {
     return true;
   }
 
-  total(): number {
+  calculateTotal(): number {
     return this._items.reduce((acc, item) => acc + item.total(), 0);
   }
   
- changeCustomerId(customerId: string) {
-  this._customerId = customerId
- }
-
- set addItems(item: OrderItem) {
-  this._items = [...this._items, item,]
+ totalDiscountPercentage(percentage: number) {
+  this._total = (this._total - (this._total * percentage)/ 100) 
  }
 }

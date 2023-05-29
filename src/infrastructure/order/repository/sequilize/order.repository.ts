@@ -10,7 +10,7 @@ export default class OrderRepository implements OrderRepositoryInterface {
       {
         id: entity.id,
         customer_id: entity.customerId,
-        total: entity.total(),
+        total: entity.total,
         items: entity.items.map((item) => ({
           id: item.id,
           name: item.name,
@@ -26,7 +26,7 @@ export default class OrderRepository implements OrderRepositoryInterface {
   }
   async update(entity: Order): Promise<void> {
     await OrderModel.update({
-      total: entity.total(),
+      total: entity.total,
       items: entity.items.map((item) => ({
         id: item.id,
         name: item.name,
@@ -38,7 +38,8 @@ export default class OrderRepository implements OrderRepositoryInterface {
       where: {
         id: entity.id
       },
-    })
+    },
+    )
   }
   async find(id: string): Promise<Order> {
     let orderModel;
