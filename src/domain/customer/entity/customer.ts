@@ -1,3 +1,8 @@
+import CustomerChangedAddressEvent from "../event/customer-changed-address.event";
+import CustomerCreatedEvent from "../event/customer-created.event";
+import SendConsoleLogWhenCustomerAddressWasChangedHandler from "../event/handler/send-console-log-when-customer-address-was-changed.handler";
+import SendConsoleLog1WhenCustomerWasCreatedHandler from "../event/handler/send-console-log1-when-customer-was-created.handler";
+import SendConsoleLog2WhenCustomerWasCreatedHandler from "../event/handler/send-console-log2-when-customer-was-created.handler";
 import Address from "../value-object/address";
 
 export default class Customer {
@@ -11,6 +16,7 @@ export default class Customer {
     this._id = id;
     this._name = name;
     this.validate();
+    this.createdCustomerEvent(this)
   }
 
   get id(): string {
@@ -45,6 +51,7 @@ export default class Customer {
   
   changeAddress(address: Address) {
     this._address = address;
+    this.changedCustomerAddressEvent(this)
   }
 
   isActive(): boolean {
@@ -68,5 +75,16 @@ export default class Customer {
 
   set Address(address: Address) {
     this._address = address;
+  }
+
+  private changedCustomerAddressEvent(customer: Customer) {
+    const event = new CustomerChangedAddressEvent(customer)
+    new SendConsoleLogWhenCustomerAddressWasChangedHandler().handle(event)
+  }
+
+  private createdCustomerEvent(newCustomer: Customer) {
+    const event = new CustomerCreatedEvent(newCustomer)
+    new SendConsoleLog1WhenCustomerWasCreatedHandler().handle(event)
+    new SendConsoleLog2WhenCustomerWasCreatedHandler().handle(event)
   }
 }
